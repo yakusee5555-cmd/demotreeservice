@@ -1,6 +1,6 @@
 import Hero from "./components/Hero";
 import { Contact, Footer, Header, MobileCallBar, Reviews, useReveal } from "./components/Sections";
-import { DarkList, FullBleed, Stacked, Work } from "./components/Showcase";
+import { DarkList, FullBleed, Pricing, Stacked, Work } from "./components/Showcase";
 
 export default function App() {
   const ref = useReveal();
@@ -13,6 +13,7 @@ export default function App() {
         <DarkList />
         <FullBleed />
         <Work />
+        <Pricing />
         <Reviews />
         <Contact />
       </main>

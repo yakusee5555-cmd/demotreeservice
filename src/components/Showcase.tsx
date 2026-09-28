@@ -179,6 +179,151 @@ export function FullBleed() {
   );
 }
 
+/* ---------- Section 6: quote & pricing (dark, video-style) ---------- */
+const TIERS = [
+  {
+    name: "Essential Trim",
+    price: "$299",
+    prefix: "from",
+    features: [
+      "Crown pruning & shaping",
+      "Deadwood removal",
+      "Hedge & shrub touch-ups",
+      "All debris hauled away",
+    ],
+    popular: false,
+  },
+  {
+    name: "Signature Removal",
+    price: "$899",
+    prefix: "from",
+    features: [
+      "Safe takedowns in tight spaces",
+      "Crane-assisted removals",
+      "Stump grinding add-on",
+      "Full property cleanup",
+      "Wood chips or firewood left",
+    ],
+    popular: true,
+  },
+  {
+    name: "Storm Response",
+    price: "24/7",
+    prefix: "emergency",
+    features: [
+      "Emergency dispatch, day or night",
+      "Fallen tree & limb removal",
+      "Custom quote on arrival",
+      "Insurance paperwork help",
+    ],
+    popular: false,
+  },
+];
+
+export function Pricing() {
+  return (
+    <section id="pricing" className="bg-ink py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6 md:px-12">
+        <p className="reveal text-[11px] font-bold uppercase tracking-[0.3em] text-cream/50">
+          Pricing
+        </p>
+        <div className="mt-3 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="reveal font-display text-4xl uppercase leading-[1.02] text-cream md:text-6xl">
+            Honest pricing.
+            <br />
+            No surprises.
+          </h2>
+          <p className="reveal max-w-md text-[15px] leading-relaxed text-cream/55">
+            Straightforward packages for the jobs we do every day. Final quote confirmed
+            on-site — always free, never pushy.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {TIERS.map((t, i) => (
+            <article
+              key={t.name}
+              className={`reveal relative flex flex-col rounded-2xl p-7 md:p-8 transition-transform duration-500 hover:-translate-y-2 ${
+                t.popular
+                  ? "bg-cream text-charcoal shadow-[0_24px_70px_rgba(0,0,0,0.45)]"
+                  : "border border-cream/15 bg-white/[0.03] text-cream"
+              }`}
+              style={{ transitionDelay: `${i * 110}ms` }}
+            >
+              {t.popular && (
+                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-forest px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-cream">
+                  Most popular
+                </span>
+              )}
+              <h3 className="font-display text-xl uppercase tracking-wide md:text-2xl">
+                {t.name}
+              </h3>
+              <div className="mt-5 flex items-baseline gap-2">
+                <span
+                  className={`text-xs font-bold uppercase tracking-[0.2em] ${
+                    t.popular ? "text-charcoal/55" : "text-cream/45"
+                  }`}
+                >
+                  {t.prefix}
+                </span>
+                <span className="font-display text-5xl md:text-6xl">{t.price}</span>
+              </div>
+              <ul
+                className={`mt-6 flex-1 space-y-3 border-t pt-6 text-[15px] ${
+                  t.popular ? "border-charcoal/15" : "border-cream/15"
+                }`}
+              >
+                {t.features.map((f) => (
+                  <li key={f} className="flex items-start gap-3">
+                    <span
+                      className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
+                        t.popular ? "bg-forest" : "bg-cream/60"
+                      }`}
+                    />
+                    <span className={t.popular ? "text-charcoal/80" : "text-cream/70"}>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#contact"
+                className={`mt-8 rounded-full py-4 text-center text-sm font-bold uppercase tracking-[0.2em] transition-colors ${
+                  t.popular
+                    ? "bg-ink text-cream hover:bg-forest-deep"
+                    : "border border-cream/30 text-cream hover:bg-cream hover:text-ink"
+                }`}
+              >
+                Get a quote
+              </a>
+            </article>
+          ))}
+        </div>
+
+        {/* slim quote band */}
+        <div
+          className="reveal mt-8 flex flex-col items-start justify-between gap-5 rounded-2xl border border-cream/15 bg-white/[0.03] p-6 md:flex-row md:items-center md:p-8"
+          style={{ transitionDelay: "200ms" }}
+        >
+          <div>
+            <h3 className="font-display text-2xl uppercase text-cream md:text-3xl">
+              Need an exact number?
+            </h3>
+            <p className="mt-1.5 max-w-xl text-[15px] text-cream/55">
+              Every tree and every property is different. Send us a few photos and we'll
+              reply with a firm, free estimate — usually same day.
+            </p>
+          </div>
+          <a
+            href="#contact"
+            className="shrink-0 rounded-full bg-cream px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] text-ink transition-colors hover:bg-white"
+          >
+            Free estimate
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- Section 5: recent work — REAL job photos ---------- */
 export function Work() {
   return (

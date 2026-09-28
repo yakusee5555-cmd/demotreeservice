@@ -10,11 +10,12 @@ export const BUSINESS = {
 };
 
 export const NAV = [
-  { label: "Services", href: "#services" },
-  { label: "Our Work", href: "#work" },
-  { label: "Why Us", href: "#why-us" },
-  { label: "Reviews", href: "#reviews" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
+  { label: "Service Areas", href: "/service-areas" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 /* Stacked headline words (section 2) */

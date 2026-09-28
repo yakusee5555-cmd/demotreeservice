@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { BUSINESS, NAV, REVIEWS, SERVICES, TOWNS } from "../data";
+import { SERVICE_DETAILS } from "../data/services";
 
 /* ---------- scroll reveal ---------- */
 export function useReveal() {
@@ -37,7 +39,7 @@ export function Header() {
     <>
       <header className="fixed inset-x-0 top-4 z-50 px-4 md:top-6 md:px-8">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-full border border-white/30 bg-cream/90 py-2.5 pl-3 pr-2.5 shadow-[0_10px_40px_rgba(0,0,0,0.25)] backdrop-blur-md md:pl-5">
-          <a href="#top" className="flex min-h-[48px] items-center gap-2.5">
+          <Link to="/" onClick={() => setOpen(false)} className="flex min-h-[48px] items-center gap-2.5">
             <svg viewBox="0 0 64 64" className="h-9 w-9">
               <rect width="64" height="64" rx="14" fill="#1B4332" />
               <g fill="none" stroke="#FAF6F0" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
@@ -52,16 +54,16 @@ export function Header() {
             <span className="font-display text-lg uppercase tracking-wide text-charcoal">
               Ironwood
             </span>
-          </a>
+          </Link>
           <nav className="hidden items-center gap-7 lg:flex">
             {NAV.map((n) => (
-              <a
+              <Link
                 key={n.href}
-                href={n.href}
+                to={n.href}
                 className="flex min-h-[48px] items-center text-[13px] font-semibold uppercase tracking-wider text-charcoal/70 transition hover:text-charcoal"
               >
                 {n.label}
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="flex items-center gap-2">
@@ -102,15 +104,15 @@ export function Header() {
         }`}
       >
         {NAV.map((n) => (
-          <a
+          <Link
             key={n.href}
-            href={n.href}
+            to={n.href}
             onClick={() => setOpen(false)}
             tabIndex={open ? 0 : -1}
             className="flex min-h-[52px] items-center border-b border-charcoal/10 text-base font-bold uppercase tracking-wider text-charcoal"
           >
             {n.label}
-          </a>
+          </Link>
         ))}
         <div className="mt-auto space-y-3 pt-8">
           <a
@@ -123,14 +125,14 @@ export function Header() {
             </svg>
             {BUSINESS.phone}
           </a>
-          <a
-            href="#contact"
+          <Link
+            to="/contact"
             onClick={() => setOpen(false)}
             tabIndex={open ? 0 : -1}
             className="flex min-h-[52px] items-center justify-center rounded-full bg-forest text-sm font-bold uppercase tracking-widest text-white"
           >
             Get a Free Quote
-          </a>
+          </Link>
         </div>
       </nav>
     </>
@@ -299,32 +301,94 @@ export function Contact() {
 /* ---------- footer ---------- */
 export function Footer() {
   return (
-    <footer className="bg-forest-deep py-12">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row md:px-12">
-        <div className="flex items-center gap-3">
-          <svg viewBox="0 0 64 64" className="h-9 w-9">
-            <rect width="64" height="64" rx="14" fill="#FAF6F0" />
-            <g fill="none" stroke="#1B4332" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M32 50 V30" />
-              <path d="M32 38 L20 26" />
-              <path d="M32 34 L44 22" />
-              <path d="M32 30 L24 20" />
-              <path d="M32 26 L40 16" />
-            </g>
-            <circle cx="32" cy="14" r="4" fill="#1B4332" />
-          </svg>
-          <span className="font-display text-lg uppercase text-cream">Ironwood Tree Service</span>
-        </div>
-        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
-          {NAV.map((n) => (
-            <a key={n.href} href={n.href} className="flex min-h-[44px] items-center text-xs font-semibold uppercase tracking-wider text-cream/70 hover:text-cream">
-              {n.label}
+    <footer className="bg-forest-deep py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-6 md:px-12">
+        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
+          <div>
+            <div className="flex items-center gap-3">
+              <svg viewBox="0 0 64 64" className="h-9 w-9">
+                <rect width="64" height="64" rx="14" fill="#FAF6F0" />
+                <g fill="none" stroke="#1B4332" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M32 50 V30" />
+                  <path d="M32 38 L20 26" />
+                  <path d="M32 34 L44 22" />
+                  <path d="M32 30 L24 20" />
+                  <path d="M32 26 L40 16" />
+                </g>
+                <circle cx="32" cy="14" r="4" fill="#1B4332" />
+              </svg>
+              <span className="font-display text-lg uppercase text-cream">Ironwood Tree Service</span>
+            </div>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-cream/60">
+              Safe removals, precision pruning &amp; 24/7 storm response across Essex County, NJ.
+            </p>
+            <a
+              href={BUSINESS.phoneHref}
+              className="mt-4 inline-block font-display text-xl text-cream underline decoration-forest decoration-2 underline-offset-4 hover:text-white"
+            >
+              {BUSINESS.phone}
             </a>
-          ))}
-        </nav>
-        <p className="text-xs text-cream/50">
-          © {new Date().getFullYear()} {BUSINESS.name}. All rights reserved.
-        </p>
+          </div>
+          <nav aria-label="Services">
+            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-cream/45">Services</p>
+            <ul className="mt-4 space-y-1">
+              <li>
+                <Link to="/services" className="flex min-h-[44px] items-center text-sm text-cream/70 hover:text-cream">
+                  All services
+                </Link>
+              </li>
+              {SERVICE_DETAILS.map((s) => (
+                <li key={s.slug}>
+                  <Link
+                    to={`/services/${s.slug}`}
+                    className="flex min-h-[44px] items-center text-sm text-cream/70 hover:text-cream"
+                  >
+                    {s.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <nav aria-label="Company">
+            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-cream/45">Company</p>
+            <ul className="mt-4 space-y-1">
+              {[
+                { label: "Home", href: "/" },
+                { label: "About", href: "/about" },
+                { label: "Service Areas", href: "/service-areas" },
+                { label: "Blog", href: "/blog" },
+                { label: "Contact", href: "/contact" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link
+                    to={l.href}
+                    className="flex min-h-[44px] items-center text-sm text-cream/70 hover:text-cream"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-cream/45">Contact</p>
+            <ul className="mt-4 space-y-1 text-sm text-cream/70">
+              <li className="flex min-h-[44px] items-center">{BUSINESS.address}</li>
+              <li className="flex min-h-[44px] items-center">{BUSINESS.hours}</li>
+              <li className="flex min-h-[44px] items-center font-semibold text-cream/85">
+                {BUSINESS.emergency}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-cream/10 pt-6 md:flex-row">
+          <p className="text-xs text-cream/50">
+            © {new Date().getFullYear()} {BUSINESS.name}. All rights reserved.
+          </p>
+          <p className="text-xs text-cream/50">
+            {BUSINESS.rating} ★ · {BUSINESS.reviewCount} Google reviews
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -343,12 +407,12 @@ export function MobileCallBar() {
         </svg>
         Call Now
       </a>
-      <a
-        href="#contact"
+      <Link
+        to="/contact"
         className="flex min-h-[60px] items-center justify-center bg-cream px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 text-[13px] font-bold uppercase tracking-widest text-ink"
       >
         Get a Quote
-      </a>
+      </Link>
     </div>
   );
 }

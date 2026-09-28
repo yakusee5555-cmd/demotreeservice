@@ -4,7 +4,7 @@ import { FLOAT_CARDS, GLASS_CARDS, LIST_ROWS, STACK_WORDS, WORK_SHOTS } from "..
 /* ---------- Section 2: stacked headline + floating cards (like "Homes. Loans. Agents. Tours.") ---------- */
 export function Stacked() {
   return (
-    <section id="services" className="relative overflow-hidden bg-cream py-24 md:py-32">
+    <section id="services" className="relative overflow-hidden bg-cream py-12 md:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 md:px-12 lg:grid-cols-[1.1fr_1fr]">
         <div>
           <p className="reveal mb-3 inline-block rounded-full border border-charcoal/15 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-charcoal/70">
@@ -12,12 +12,12 @@ export function Stacked() {
           </p>
           <h2 className="font-display leading-[0.98]">
             {STACK_WORDS.map((w, i) => (
-              <span key={w} className="reveal block text-[13vw] text-charcoal md:text-[5.2rem]" style={{ transitionDelay: `${i * 90}ms` }}>
+              <span key={w} className="reveal block text-[clamp(1.5rem,7.5vw,5.2rem)] text-charcoal" style={{ transitionDelay: `${i * 90}ms` }}>
                 {w}
               </span>
             ))}
           </h2>
-          <p className="reveal mt-6 max-w-md text-[15px] leading-relaxed text-charcoal/65">
+          <p className="reveal mt-6 max-w-md text-base leading-relaxed text-charcoal/65">
             Every job done by trained climbers with professional rigging — and we leave your
             property cleaner than we found it.
           </p>
@@ -72,7 +72,7 @@ function ServiceRow({ row, i }: { row: (typeof LIST_ROWS)[number]; i: number }) 
         <h3 className="row-title font-display text-2xl uppercase text-cream/90 md:text-5xl">
           {row.title}
         </h3>
-        <p className="mt-1 text-sm text-cream/45">{row.desc}</p>
+        <p className="mt-1 text-base text-cream/45 md:text-sm">{row.desc}</p>
       </div>
       {/* inline preview — opens in the same row, smaller */}
       <div
@@ -91,18 +91,18 @@ function ServiceRow({ row, i }: { row: (typeof LIST_ROWS)[number]; i: number }) 
 
 export function DarkList() {
   return (
-    <section id="why-us" className="relative bg-ink py-24 md:py-32">
+    <section id="why-us" className="relative bg-ink py-12 md:py-32">
       <div className="mx-auto max-w-6xl px-6 md:px-12">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4 md:mb-12">
           <div>
             <p className="reveal text-[11px] font-bold uppercase tracking-[0.3em] text-cream/50">
               Our services
             </p>
-            <h2 className="reveal mt-3 font-display text-4xl uppercase text-cream md:text-6xl">
+            <h2 className="reveal mt-3 font-display text-2xl uppercase leading-[1.05] text-cream md:text-6xl md:leading-[1.02]">
               What we do best.
             </h2>
           </div>
-          <p className="reveal text-sm text-cream/50">Hover a service to preview</p>
+          <p className="reveal hidden text-sm text-cream/50 md:block">Hover a service to preview</p>
         </div>
 
         <div>
@@ -121,6 +121,13 @@ export function FullBleed() {
   const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Skip parallax on mobile + reduced-motion: bg stays static, content fully visible
+    if (
+      window.matchMedia("(max-width: 767px)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
     let raf = 0;
     const onScroll = () => {
       cancelAnimationFrame(raf);
@@ -152,15 +159,15 @@ export function FullBleed() {
       </div>
       <div className="absolute inset-0 bg-black/35" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 py-24 md:px-12 md:py-36">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 py-12 md:px-12 md:py-36">
         <p className="reveal text-[11px] font-bold uppercase tracking-[0.3em] text-cream/85">
           Why Ironwood
         </p>
-        <h2 className="reveal mt-3 max-w-2xl font-display text-4xl uppercase leading-[1.02] text-cream md:text-6xl">
+        <h2 className="reveal mt-3 max-w-2xl font-display text-2xl uppercase leading-[1.05] text-cream md:text-6xl md:leading-[1.02]">
           Big-company gear. Neighborly care.
         </h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-3 md:mt-16 md:gap-5 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-3 md:mt-16 md:grid-cols-2 md:gap-5 lg:grid-cols-4">
           {GLASS_CARDS.map((c, i) => (
             <div
               key={c.title}
@@ -170,7 +177,7 @@ export function FullBleed() {
               style={{ transitionDelay: `${i * 120}ms` }}
             >
               <h3 className="font-display text-base uppercase text-cream md:text-lg">{c.title}</h3>
-              <p className="mt-1 text-xs leading-relaxed text-cream/80 md:text-[13px]">{c.desc}</p>
+              <p className="mt-1 text-sm leading-relaxed text-cream/80 md:text-[13px]">{c.desc}</p>
             </div>
           ))}
         </div>
@@ -222,24 +229,24 @@ const TIERS = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="bg-ink py-24 md:py-32">
+    <section id="pricing" className="bg-ink py-12 md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <p className="reveal text-[11px] font-bold uppercase tracking-[0.3em] text-cream/50">
           Pricing
         </p>
         <div className="mt-3 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="reveal font-display text-4xl uppercase leading-[1.02] text-cream md:text-6xl">
+          <h2 className="reveal font-display text-2xl uppercase leading-[1.05] text-cream md:text-6xl md:leading-[1.02]">
             Honest pricing.
             <br />
             No surprises.
           </h2>
-          <p className="reveal max-w-md text-[15px] leading-relaxed text-cream/55">
+          <p className="reveal max-w-md text-base leading-relaxed text-cream/55">
             Straightforward packages for the jobs we do every day. Final quote confirmed
             on-site — always free, never pushy.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-5 md:mt-12 md:grid-cols-3">
           {TIERS.map((t, i) => (
             <article
               key={t.name}
@@ -266,10 +273,10 @@ export function Pricing() {
                 >
                   {t.prefix}
                 </span>
-                <span className="font-display text-5xl md:text-6xl">{t.price}</span>
+                <span className="font-display text-4xl md:text-6xl">{t.price}</span>
               </div>
               <ul
-                className={`mt-6 flex-1 space-y-3 border-t pt-6 text-[15px] ${
+                className={`mt-6 flex-1 space-y-3 border-t pt-6 text-base ${
                   t.popular ? "border-charcoal/15" : "border-cream/15"
                 }`}
               >
@@ -307,7 +314,7 @@ export function Pricing() {
             <h3 className="font-display text-2xl uppercase text-cream md:text-3xl">
               Need an exact number?
             </h3>
-            <p className="mt-1.5 max-w-xl text-[15px] text-cream/55">
+            <p className="mt-1.5 max-w-xl text-base text-cream/55">
               Every tree and every property is different. Send us a few photos and we'll
               reply with a firm, free estimate — usually same day.
             </p>
@@ -327,23 +334,23 @@ export function Pricing() {
 /* ---------- Section 5: recent work — REAL job photos ---------- */
 export function Work() {
   return (
-    <section id="work" className="bg-cream py-24 md:py-32">
+    <section id="work" className="bg-cream py-12 md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <p className="reveal text-[11px] font-bold uppercase tracking-[0.3em] text-forest">
           Recent work
         </p>
         <div className="mt-3 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="reveal font-display text-4xl uppercase leading-[1.02] text-charcoal md:text-6xl">
+          <h2 className="reveal font-display text-2xl uppercase leading-[1.05] text-charcoal md:text-6xl md:leading-[1.02]">
             Real jobs.
             <br />
             Real photos.
           </h2>
-          <p className="reveal max-w-md text-[15px] text-charcoal/65">
+          <p className="reveal max-w-md text-base text-charcoal/65">
             No stock "afters" — these are actual Ironwood crews on actual jobs around Essex County.
           </p>
         </div>
 
-        <div className="mt-12 columns-2 gap-5 md:columns-3 [&>*]:mb-5">
+        <div className="mt-8 columns-1 gap-5 sm:columns-2 md:mt-12 md:columns-3 [&>*]:mb-5">
           {WORK_SHOTS.map((s, i) => (
             <figure
               key={s.img + i}

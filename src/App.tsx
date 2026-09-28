@@ -5,7 +5,7 @@ import { DarkList, FullBleed, Pricing, Stacked, Work } from "./components/Showca
 export default function App() {
   const ref = useReveal();
   return (
-    <div id="top" ref={ref} className="min-h-screen bg-cream pb-16 md:pb-0">
+    <div id="top" ref={ref} className="min-h-screen bg-cream pb-[calc(3.75rem+env(safe-area-inset-bottom))] md:pb-0">
       <Header />
       <main>
         <Hero />

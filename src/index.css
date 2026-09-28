@@ -12,6 +12,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -19,6 +20,33 @@ body {
   background: var(--color-cream);
   color: var(--color-charcoal);
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- honor reduced-motion: kill entrance/parallax/float animations, show content ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-in,
+  .hero-in-img,
+  .rise-in,
+  .rise-in-1,
+  .rise-in-2,
+  .rise-in-3,
+  .hero-title,
+  .hero-fore,
+  .hero-fade,
+  .floaty,
+  .floaty-2,
+  .floaty-3 {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 .font-display {

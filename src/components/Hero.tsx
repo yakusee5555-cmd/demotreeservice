@@ -1,89 +1,98 @@
-import { useEffect, useRef } from "react";
-import { BUSINESS } from "../data";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-/* Section 1 — Zillow-style hero: full-bleed image + giant overlaid wordmark */
 export default function Hero() {
-  const imgRef = useRef<HTMLImageElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const y = window.scrollY;
-        if (imgRef.current) imgRef.current.style.transform = `scale(1.08) translateY(${y * 0.18}px)`;
-        if (textRef.current) textRef.current.style.transform = `translateY(${y * 0.32}px)`;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const yBack = useTransform(scrollYProgress, [0, 1], [0, 160]);
+  const yFore = useTransform(scrollYProgress, [0, 1], [0, 70]);
+  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section className="relative h-[100svh] min-h-[620px] w-full overflow-hidden bg-ink">
-      <img
-        ref={imgRef}
-        src="/img/hero.jpg"
-        alt="Tree-lined street with mature trees"
-        className="hero-in-img absolute inset-0 h-full w-full object-cover"
-        style={{ transform: "scale(1.08)" }}
-        draggable={false}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30" />
+    <section ref={ref} className="relative h-[100svh] overflow-hidden bg-[#0b100d]">
+      {/* BACK LAYER — atmosphere + giant wordmark sitting behind the trees */}
+      <motion.div style={{ y: yBack }} className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#18261c_0%,#0b100d_70%)]" />
+        <div className="absolute inset-0 flex items-center justify-center px-4">
+          <motion.h1
+            initial={{ opacity: 0, scale: 1.18, filter: "blur(16px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display font-black text-[#f4efe4] leading-none tracking-tight select-none text-[clamp(4.5rem,20vw,21rem)]"
+          >
+            IRONWOOD
+          </motion.h1>
+        </div>
+      </motion.div>
 
-      {/* top-right labels like the video */}
-      <div className="rise-in rise-in-3 absolute right-6 top-24 z-20 hidden text-right text-[11px] font-semibold uppercase tracking-[0.25em] text-cream/80 md:right-12 md:top-28 md:block">
-        <p>Tree Care</p>
-        <p className="mt-1">Removal</p>
-        <p className="mt-1">Pruning</p>
-      </div>
+      {/* FRONT LAYER — trees overlapping the wordmark */}
+      <motion.div style={{ y: yFore }} className="absolute inset-0 z-10 pointer-events-none">
+        <motion.img
+          src="/img/forest.jpg"
+          alt="Pine trees standing in front of the Ironwood wordmark"
+          initial={{ y: 120, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="h-full w-full object-cover"
+          style={{
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 16%, black 48%)",
+            maskImage: "linear-gradient(to bottom, transparent 16%, black 48%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      </motion.div>
 
-      {/* giant wordmark */}
-      <div
-        ref={textRef}
-        className="absolute inset-x-0 bottom-[16%] z-10 px-4 text-center will-change-transform"
+      {/* CONTENT */}
+      <motion.div
+        style={{ opacity: fade }}
+        className="absolute inset-0 z-20 flex flex-col justify-between px-6 md:px-12 pt-28 pb-8"
       >
-        <h1 className="hero-in font-display text-[17.5vw] leading-none text-cream drop-shadow-[0_6px_30px_rgba(0,0,0,0.45)]">
-          IRONWOOD
-        </h1>
-        <p className="rise-in rise-in-2 mx-auto mt-2 max-w-xl text-sm font-medium uppercase tracking-[0.35em] text-cream/90 md:text-base">
-          Tree Service
-        </p>
-      </div>
-
-      {/* bottom info row */}
-      <div className="rise-in rise-in-3 absolute inset-x-0 bottom-0 z-20">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 pb-8 md:px-12">
-          <p className="max-w-md text-sm leading-relaxed text-cream/85">
-            Safe removals, precision pruning & 24/7 storm response across Essex County, NJ.
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className="flex justify-end"
+        >
+          <p className="text-right text-[11px] md:text-xs font-bold tracking-[0.35em] text-white/70 leading-loose">
+            TREE CARE<br />REMOVAL<br />PRUNING
           </p>
-          <div className="flex gap-3">
-            <a
-              href="#contact"
-              className="rounded-full bg-cream px-7 py-3.5 text-xs font-bold uppercase tracking-widest text-charcoal transition hover:bg-white"
-            >
-              Free estimate
-            </a>
-            <a
-              href={BUSINESS.phoneHref}
-              className="rounded-full border-2 border-cream/70 px-7 py-3.5 text-xs font-bold uppercase tracking-widest text-cream transition hover:bg-cream hover:text-charcoal"
-            >
-              {BUSINESS.phone}
-            </a>
-          </div>
-        </div>
-      </div>
+        </motion.div>
 
-      {/* scroll cue */}
-      <div className="absolute bottom-24 left-1/2 z-20 hidden -translate-x-1/2 md:block">
-        <div className="flex h-12 w-7 items-start justify-center rounded-full border-2 border-cream/50 p-1.5">
-          <div className="h-2 w-1 animate-bounce rounded-full bg-cream/80" />
+        <div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.8 }}
+            className="text-center text-xs md:text-sm font-bold tracking-[0.5em] text-white/80 mb-8"
+          >
+            TREE SERVICE
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6"
+          >
+            <p className="max-w-md text-white/85 text-base md:text-lg leading-relaxed">
+              Safe removals, precision pruning &amp; 24/7 storm response across Essex County, NJ.
+            </p>
+            <div className="flex gap-3">
+              <a
+                href="#contact"
+                className="rounded-full bg-[#f4efe4] px-8 py-4 text-sm font-bold tracking-widest text-[#0b100d] hover:bg-white transition-colors"
+              >
+                FREE ESTIMATE
+              </a>
+              <a
+                href="tel:+15552345678"
+                className="rounded-full border border-white/60 px-8 py-4 text-sm font-bold tracking-widest text-white hover:bg-white/10 transition-colors"
+              >
+                (555) 234-5678
+              </a>
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

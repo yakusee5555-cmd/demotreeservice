@@ -1,77 +1,78 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 export default function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yBack = useTransform(scrollYProgress, [0, 1], [0, 160]);
-  const yFore = useTransform(scrollYProgress, [0, 1], [0, 70]);
-  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const backRef = useRef<HTMLDivElement>(null);
+  const foreRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (backRef.current) backRef.current.style.transform = `translateY(${y * 0.25}px)`;
+        if (foreRef.current) foreRef.current.style.transform = `translateY(${y * 0.12}px)`;
+        if (contentRef.current)
+          contentRef.current.style.opacity = String(Math.max(0, 1 - y / 500));
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
-    <section ref={ref} className="relative h-[100svh] overflow-hidden bg-[#0b100d]">
+    <section className="relative h-[100svh] overflow-hidden bg-[#0b100d]">
       {/* BACK LAYER — atmosphere + giant wordmark sitting behind the trees */}
-      <motion.div style={{ y: yBack }} className="absolute inset-0">
+      <div ref={backRef} className="absolute inset-0 will-change-transform">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#18261c_0%,#0b100d_70%)]" />
         <div className="absolute inset-0 flex items-center justify-center px-4">
-          <motion.h1
-            initial={{ opacity: 0, scale: 1.18, filter: "blur(16px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display font-black text-[#f4efe4] leading-none tracking-tight select-none text-[clamp(4.5rem,20vw,21rem)]"
-          >
+          <h1 className="hero-title font-display font-black text-[#f4efe4] leading-none tracking-tight select-none text-[clamp(4.5rem,20vw,21rem)]">
             IRONWOOD
-          </motion.h1>
+          </h1>
         </div>
-      </motion.div>
+      </div>
 
       {/* FRONT LAYER — trees overlapping the wordmark */}
-      <motion.div style={{ y: yFore }} className="absolute inset-0 z-10 pointer-events-none">
-        <motion.img
+      <div ref={foreRef} className="absolute inset-0 z-10 will-change-transform pointer-events-none">
+        <img
           src="/img/forest.jpg"
           alt="Pine trees standing in front of the Ironwood wordmark"
-          initial={{ y: 120, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="h-full w-full object-cover"
+          draggable={false}
+          className="hero-fore h-full w-full object-cover"
           style={{
             WebkitMaskImage: "linear-gradient(to bottom, transparent 16%, black 48%)",
             maskImage: "linear-gradient(to bottom, transparent 16%, black 48%)",
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-      </motion.div>
+      </div>
 
       {/* CONTENT */}
-      <motion.div
-        style={{ opacity: fade }}
+      <div
+        ref={contentRef}
         className="absolute inset-0 z-20 flex flex-col justify-between px-6 md:px-12 pt-28 pb-8"
       >
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className="flex justify-end"
-        >
+        <div className="hero-fade flex justify-end" style={{ animationDelay: "0.9s" }}>
           <p className="text-right text-[11px] md:text-xs font-bold tracking-[0.35em] text-white/70 leading-loose">
             TREE CARE<br />REMOVAL<br />PRUNING
           </p>
-        </motion.div>
+        </div>
 
         <div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1, duration: 0.8 }}
-            className="text-center text-xs md:text-sm font-bold tracking-[0.5em] text-white/80 mb-8"
+          <p
+            className="hero-fade text-center text-xs md:text-sm font-bold tracking-[0.5em] text-white/80 mb-8"
+            style={{ animationDelay: "1.1s" }}
           >
             TREE SERVICE
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6"
+          </p>
+          <div
+            className="hero-fade flex flex-col md:flex-row items-start md:items-end justify-between gap-6"
+            style={{ animationDelay: "1.2s" }}
           >
             <p className="max-w-md text-white/85 text-base md:text-lg leading-relaxed">
               Safe removals, precision pruning &amp; 24/7 storm response across Essex County, NJ.
@@ -90,9 +91,9 @@ export default function Hero() {
                 (555) 234-5678
               </a>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -139,3 +139,20 @@ body {
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     color 0.3s ease;
 }
+
+/* ---- hero: layered text-behind-trees entrance ---- */
+@keyframes heroTitleIn {
+  from { opacity: 0; transform: scale(1.18); filter: blur(16px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+.hero-title { animation: heroTitleIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes heroForeIn {
+  from { opacity: 0; transform: translateY(120px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-fore { animation: heroForeIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-fade { animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }

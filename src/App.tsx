@@ -1,31 +1,19 @@
-import HeroSlider from "./components/HeroSlider";
-import {
-  Areas,
-  Contact,
-  Footer,
-  Header,
-  MobileCallBar,
-  Reviews,
-  Services,
-  TrustBar,
-  WhyUs,
-  Work,
-  useReveal,
-} from "./components/Sections";
+import Hero from "./components/Hero";
+import { Contact, Footer, Header, MobileCallBar, Reviews, useReveal } from "./components/Sections";
+import { DarkList, FullBleed, Stacked, Work } from "./components/Showcase";
 
 export default function App() {
   const ref = useReveal();
   return (
-    <div ref={ref} id="top" className="bg-cream pb-16 md:pb-0">
+    <div id="top" ref={ref} className="min-h-screen bg-cream pb-16 md:pb-0">
       <Header />
       <main>
-        <HeroSlider />
-        <TrustBar />
-        <Services />
+        <Hero />
+        <Stacked />
+        <DarkList />
+        <FullBleed />
         <Work />
-        <WhyUs />
         <Reviews />
-        <Areas />
         <Contact />
       </main>
       <Footer />
